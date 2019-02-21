@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/subosito/gotenv"
-	"fmt"
 	"bot/app/routes"
 )
 
@@ -11,6 +10,5 @@ func init() {
 }
 
 func main()  {
-	fmt.Println("Hello")
-	routes.AppSetup()
+	routes.HandleRequests()
 }

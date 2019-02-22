@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"os"
 	"fmt"
-	"io/ioutil"
+	//"io/ioutil"
 )
 
 func GetMessageData(message string) ( sender_id string, text string, postback string)  {
@@ -15,24 +15,26 @@ func GetMessageData(message string) ( sender_id string, text string, postback st
 	data_text := gjson.Get(message, "entry.#.messaging.#.message")
 	data_postback := gjson.Get(message, "entry.#.messaging.#.postback")
 	sender_id = data_sender.Array()[0].Array()[0].String()
-	text = HandleMessage(data_text.Array()[0].Array()[0].String())
-	postback = HandlePostback(data_postback.Array()[0].String())
+	text = HandleMessage(data_text)
+	postback = HandlePostback(data_postback)
 	return
 }
 
-func HandleMessage(message string) (text string) {
+func HandleMessage(message gjson.Result) (text string) {
 	text = ""
-	data_text := gjson.Get(message, "text").String()
-	if data_text != "" {
-		text = data_text
+	if len(message.Array()[0].Array()) > 0 {
+		text = gjson.Get(message.Array()[0].Array()[0].String(), "text").String()
 	}
 	return
 }
 
-func HandlePostback(message string) (postback string)  {
+func HandlePostback(message gjson.Result) (postback string)  {
+	fmt.Println("---postback---")
+	fmt.Println(message)
 	postback = ""
-	if len(message) > 0 {
-		postback = gjson.Get(message, "postback").String()
+	if len(message.Array()) > 0 {
+		fmt.Println(message.Get("payload"))
+		postback = gjson.Get(message.Array()[0].String(), "payload").String()
 	}
 	return
 }
@@ -59,7 +61,6 @@ func SendingButtons(sender string, message string, data string)  {
 									}
 								}
 							}`, sender, message, data)
-	fmt.Println(request)
 	jsonStr := []byte(request)
 	PostData(jsonStr)
 }
@@ -75,9 +76,9 @@ func PostData(post_content []byte)  {
 	defer resp.Body.Close()
 	
 	fmt.Println("response Status:", resp.Status)
-    fmt.Println("response Headers:", resp.Header)
-    body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Println("response Body:", string(body))
+    //fmt.Println("response Headers:", resp.Header)
+    //body, _ := ioutil.ReadAll(resp.Body)
+    //fmt.Println("response Body:", string(body))
 }
 
 func FacebbokUrl() string {

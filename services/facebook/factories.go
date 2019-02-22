@@ -23,6 +23,7 @@ func GetMessageData(message string) ( sender_id string, text string, postback st
 func HandleMessage(message gjson.Result) (text string) {
 	text = ""
 	if len(message.Array()) > 0 {
+		//need fix
 		//text = gjson.Get(message.Array()[0].Array()[0].String(), "text").String()
 	}
 	return

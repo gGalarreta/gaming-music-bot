@@ -4,9 +4,11 @@ import (
 	"net/http"
 	"log"
 	"github.com/gorilla/mux"
+	//"encoding/json"
 	"bot/app/services/facebook"
 	"fmt"
 	"os"
+	"io/ioutil"
 	//"strconv"
 )
 
@@ -17,6 +19,7 @@ func HandleRequests()  {
 }
 
 func server(router *mux.Router)  {
+	fmt.Println("Server up. Running at " + os.Getenv("HOST"))
 	server := http.ListenAndServe(os.Getenv("HOST"), router)
 	log.Fatal(server)
 }
@@ -31,8 +34,12 @@ func Index(w http.ResponseWriter, r *http.Request)  {
 }
 
 func Messages(w http.ResponseWriter, req *http.Request)  {
-	log.Println(req.URL.Query)
-	facebook.SendingText()
+	body, _ := ioutil.ReadAll(req.Body)
+	sender, text, postback := facebook.GetMessageData(string(body))
+	fmt.Println(sender)
+	fmt.Println(text)
+	fmt.Println(postback)
+	//facebook.SendingText()
 	//fmt.Println(strconv.Atoi(r))
 	//fmt.Println(req.URL.Query().Get("hub.challenge"))
 	//fmt.Fprintf(w, req.URL.Query().Get("hub.challenge"))

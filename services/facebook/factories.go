@@ -38,8 +38,29 @@ func HandlePostback(message string) (postback string)  {
 }
 
 func SendingText(sender string, message string) {
-	response := fmt.Sprintf(`{"recipient":{"id": "%s" },"message":{"text": "%s" }}`, sender, message)
-	jsonStr := []byte(response)
+	request := fmt.Sprintf(`{	"recipient":{"id": "%s" },
+								"message":{"text": "%s" }
+							}`, sender, message)
+	jsonStr := []byte(request)
+	PostData(jsonStr)
+}
+
+func SendingButtons(sender string, message string, data string)  {
+	request := fmt.Sprintf(`{
+								"recipient":{"id": "%s" },
+								"message":{
+									"attachment": {
+										"type": "template", 
+										"payload": {
+											"template_type": "button", 
+											"text": "%s", 
+											"buttons": [%s]
+										} 
+									}
+								}
+							}`, sender, message, data)
+	fmt.Println(request)
+	jsonStr := []byte(request)
 	PostData(jsonStr)
 }
 

@@ -22,19 +22,16 @@ func GetMessageData(message string) ( sender_id string, text string, postback st
 
 func HandleMessage(message gjson.Result) (text string) {
 	text = ""
-	if len(message.Array()[0].Array()) > 0 {
-		text = gjson.Get(message.Array()[0].Array()[0].String(), "text").String()
+	if len(message.Array()) > 0 {
+		//text = gjson.Get(message.Array()[0].Array()[0].String(), "text").String()
 	}
 	return
 }
 
 func HandlePostback(message gjson.Result) (postback string)  {
-	fmt.Println("---postback---")
-	fmt.Println(message)
 	postback = ""
-	if len(message.Array()) > 0 {
-		fmt.Println(message.Get("payload"))
-		postback = gjson.Get(message.Array()[0].String(), "payload").String()
+	if len(message.Array()[0].Array()) > 0 {
+		postback = message.Array()[0].Array()[0].Get("payload").String()
 	}
 	return
 }
@@ -61,6 +58,29 @@ func SendingButtons(sender string, message string, data string)  {
 									}
 								}
 							}`, sender, message, data)
+	jsonStr := []byte(request)
+	PostData(jsonStr)
+}
+
+func SendingSong(sender string, url_song string)  {
+	request := fmt.Sprintf(`{
+						"recipient":{
+						"id":"%s"
+						},
+						"message":{
+						"attachment":{
+							"type":"template",
+							"payload":{
+							"template_type":"open_graph",
+							"elements":[
+								{
+								"url":"%s"
+								}
+							]
+							}
+						}
+						}
+					}`, sender, url_song)
 	jsonStr := []byte(request)
 	PostData(jsonStr)
 }

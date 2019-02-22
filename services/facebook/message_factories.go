@@ -43,6 +43,8 @@ func TimeOptions(sender string, postback string)  {
 func MatchedSongs(sender string, text string, postback string )  {
 	if postback != "" {
 		SendingText(sender, messages.SHOW_RESULTS_MESSAGE)
+		song_url := "https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp"
+		SendingSong(sender, song_url)
 	}
 }
 

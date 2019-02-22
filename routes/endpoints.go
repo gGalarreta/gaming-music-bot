@@ -25,16 +25,25 @@ func server(router *mux.Router)  {
 func urls(router *mux.Router)  {
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/messages", Messages)
+	router.HandleFunc("/spotify_callbacks", SpotifyCallbacks)
 }
 
-func Index(w http.ResponseWriter, r *http.Request)  {
+func Index(w http.ResponseWriter, req *http.Request)  {
 	fmt.Println("We are on index")
 }
 
 func Messages(w http.ResponseWriter, req *http.Request)  {
+	fmt.Println("We are on messages")
 	body, _ := ioutil.ReadAll(req.Body)
 	sender, text, postback := facebook.GetMessageData(string(body))
 	facebook.HandleResponses(sender, text, postback)
-	//fmt.Println(req.URL.Query().Get("hub.challenge"))
-	//fmt.Fprintf(w, req.URL.Query().Get("hub.challenge"))
+	/*
+	fmt.Println(req.URL.Query().Get("hub.challenge"))
+	fmt.Fprintf(w, req.URL.Query().Get("hub.challenge"))
+	*/
+}
+
+func SpotifyCallbacks(w http.ResponseWriter, req *http.Request)  {
+	fmt.Println(" We are on spotify_callbacks")
+	fmt.Println(req)
 }

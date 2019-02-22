@@ -4,12 +4,10 @@ import (
 	"net/http"
 	"log"
 	"github.com/gorilla/mux"
-	//"encoding/json"
 	"bot/app/services/facebook"
 	"fmt"
 	"os"
 	"io/ioutil"
-	//"strconv"
 )
 
 func HandleRequests()  {
@@ -40,7 +38,6 @@ func Messages(w http.ResponseWriter, req *http.Request)  {
 	fmt.Println(text)
 	fmt.Println(postback)
 	//facebook.SendingText()
-	//fmt.Println(strconv.Atoi(r))
 	//fmt.Println(req.URL.Query().Get("hub.challenge"))
 	//fmt.Fprintf(w, req.URL.Query().Get("hub.challenge"))
 }

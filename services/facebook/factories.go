@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"bytes"
 	"os"
+	"fmt"
+	"io/ioutil"
 )
 
 func GetMessageData(message string) ( sender_id string, text string, postback string)  {
@@ -36,13 +38,9 @@ func HandlePostback(message string) (postback string)  {
 }
 
 func SendingText(sender string, message string) {
-    jsonStr := []byte(`{	"recipient":{
-		"id":` + sender + `
-	  },
-	  "message":{
-		"text": ` + message + `
-	  }}`)
-	  PostData(jsonStr)
+	response := fmt.Sprintf(`{"recipient":{"id": "%s" },"message":{"text": "%s" }}`, sender, message)
+	jsonStr := []byte(response)
+	PostData(jsonStr)
 }
 
 func PostData(post_content []byte)  {
@@ -53,7 +51,12 @@ func PostData(post_content []byte)  {
     if err != nil {
         panic(err)
     }
-    defer resp.Body.Close()
+	defer resp.Body.Close()
+	
+	fmt.Println("response Status:", resp.Status)
+    fmt.Println("response Headers:", resp.Header)
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Println("response Body:", string(body))
 }
 
 func FacebbokUrl() string {

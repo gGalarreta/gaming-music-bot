@@ -1,10 +1,10 @@
 package facebook
 
 func HandleResponses(sender string, text string, postback string)  {
-	Greetings(sender, text, postback)
+	Greetings(sender, postback)
 }
 
-func Greetings(sender string, text string, postback string)  {
+func Greetings(sender string, postback string)  {
 	message := "Bienvenido al bot"
 	SendingText(sender, message)
 }

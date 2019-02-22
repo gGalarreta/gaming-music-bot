@@ -2,6 +2,9 @@ package facebook
 
 import (
 	"github.com/tidwall/gjson"
+	"net/http"
+	"bytes"
+	"os"
 )
 
 func GetMessageData(message string) ( sender_id string, text string, postback string)  {
@@ -30,4 +33,29 @@ func HandlePostback(message string) (postback string)  {
 		postback = gjson.Get(message, "postback").String()
 	}
 	return
+}
+
+func SendingText(sender string, message string) {
+    jsonStr := []byte(`{	"recipient":{
+		"id":` + sender + `
+	  },
+	  "message":{
+		"text": ` + message + `
+	  }}`)
+	  PostData(jsonStr)
+}
+
+func PostData(post_content []byte)  {
+    req, err := http.NewRequest("POST", FacebbokUrl(), bytes.NewBuffer(post_content))
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+}
+
+func FacebbokUrl() string {
+	return os.Getenv("FB_URL") + os.Getenv("FB_TOKEN")
 }

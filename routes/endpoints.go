@@ -34,10 +34,7 @@ func Index(w http.ResponseWriter, r *http.Request)  {
 func Messages(w http.ResponseWriter, req *http.Request)  {
 	body, _ := ioutil.ReadAll(req.Body)
 	sender, text, postback := facebook.GetMessageData(string(body))
-	fmt.Println(sender)
-	fmt.Println(text)
-	fmt.Println(postback)
-	//facebook.SendingText()
+	facebook.HandleResponses(sender, text, postback)
 	//fmt.Println(req.URL.Query().Get("hub.challenge"))
 	//fmt.Fprintf(w, req.URL.Query().Get("hub.challenge"))
 }
